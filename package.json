@@ -23,9 +23,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@rsbuild/core": "^1.7.6",
-    "@rsbuild/plugin-react": "^1.4.6",
-    "@rsbuild/plugin-sass": "^1.5.3",
+    "@rsbuild/core": "^2.3.1",
+    "@rsbuild/plugin-react": "^2.1.1",
+    "@rsbuild/plugin-sass": "^2.0.1",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
