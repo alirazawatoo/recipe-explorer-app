@@ -73,8 +73,14 @@ export function RecipeDetailsPage() {
         <div className={styles.content}>
           <h1 className={styles.h1}>{title}</h1>
           {item.image && <img className={styles.hero} src={item.image} alt={title} />}
-          <section><h2>Ingredients</h2><ul>{item.ingredients?.map((value, index) => <li key={index}>{value}</li>)}</ul></section>
-          <section><h2>Instructions</h2><ol>{item.instructions?.map((value, index) => <li key={index}>{value}</li>)}</ol></section>
+          <section aria-labelledby="ingredients-heading">
+            <h2 id="ingredients-heading">Ingredients</h2>
+            <ul>{item.ingredients?.map((value, index) => <li key={index}>{value}</li>)}</ul>
+          </section>
+          <section aria-labelledby="instructions-heading">
+            <h2 id="instructions-heading">Instructions</h2>
+            <ol>{item.instructions?.map((value, index) => <li key={index}>{value}</li>)}</ol>
+          </section>
         </div>
       )}
 

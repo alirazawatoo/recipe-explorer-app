@@ -37,6 +37,7 @@ export function RecipesPage() {
       <p className={styles.intro}>Browse sample recipes, filter the current page and open an ingredient list.</p>
       <div className={styles.toolbar}>
         <input
+          type="search"
           className={styles.search}
           defaultValue={query}
           aria-label="Filter this page"
