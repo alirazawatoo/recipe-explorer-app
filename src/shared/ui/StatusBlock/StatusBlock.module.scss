@@ -1,25 +1,32 @@
 .root {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
-  padding: 14px;
-  max-width: 720px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--olive);
+  border-radius: var(--radius);
+  background: var(--card);
+  padding: 16px 18px;
+  max-width: 640px;
 }
 
 .title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
   font-weight: 600;
-  margin-bottom: 6px;
 }
 
 .desc {
-  opacity: 0.8;
+  margin: 4px 0 0;
+  color: var(--ink-soft);
 }
 
 .action {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
-.loading {}
-.error {
-  border-color: rgba(200, 0, 0, 0.35);
+.loading {
+  border-left-color: var(--line-strong);
 }
-.empty {}
+
+.error {
+  border-left-color: var(--paprika);
+}

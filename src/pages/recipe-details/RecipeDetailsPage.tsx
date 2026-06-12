@@ -4,6 +4,8 @@ import Dialog from 'rc-dialog';
 import 'rc-dialog/assets/index.css';
 
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { totalMinutes } from '@/shared/lib/recipeFacts';
+import { RecipeImage } from '@/shared/ui/RecipeImage/RecipeImage';
 import { StatusBlock } from '@/shared/ui/StatusBlock/StatusBlock';
 import { loadRecipeDetails, recipeDetailsActions } from './recipeDetailsSlice';
 
@@ -42,27 +44,39 @@ export function RecipeDetailsPage() {
   }
 
   const title = item?.name ?? `Recipe #${recipeId}`;
+  const minutes = item ? totalMinutes(item) : null;
+  const facts = item
+    ? [
+        ['Prep', item.prepTimeMinutes != null ? `${item.prepTimeMinutes} min` : null],
+        ['Cook', item.cookTimeMinutes != null ? `${item.cookTimeMinutes} min` : null],
+        ['Total', minutes != null ? `${minutes} min` : null],
+        ['Serves', item.servings ?? null],
+        ['Level', item.difficulty ?? null],
+      ].filter(([, value]) => value != null)
+    : [];
 
   return (
-    <div className={styles.root}>
+    <article className={styles.root}>
       <div className={styles.topbar}>
-        <Link to="/recipes">← Back</Link>
-        <button type="button" disabled={!item} onClick={() => setShowDialog(true)}>
+        <Link to="/recipes" className={styles.back}>
+          <span aria-hidden="true">←</span> All recipes
+        </Link>
+        <button type="button" className="button" disabled={!item} onClick={() => setShowDialog(true)}>
           Recipe overview
         </button>
       </div>
 
       {status === 'loading' && (
-        <StatusBlock variant="loading" title="Loading" description="Fetching recipe…" />
+        <StatusBlock variant="loading" title="Loading recipe" description="Fetching ingredients and method…" />
       )}
 
       {status === 'failed' && (
         <StatusBlock
           variant="error"
-          title="Error"
+          title="This recipe could not be loaded"
           description={error ?? 'Something went wrong'}
           action={
-            <button type="button" onClick={() => setAttempt((n) => n + 1)}>
+            <button type="button" className="button" onClick={() => setAttempt((n) => n + 1)}>
               Retry
             </button>
           }
@@ -70,28 +84,52 @@ export function RecipeDetailsPage() {
       )}
 
       {status === 'succeeded' && item && (
-        <div className={styles.content}>
-          <h1 className={styles.h1}>{title}</h1>
-          {item.image && <img className={styles.hero} src={item.image} alt={title} />}
-          <section aria-labelledby="ingredients-heading">
-            <h2 id="ingredients-heading">Ingredients</h2>
-            <ul>{item.ingredients?.map((value, index) => <li key={index}>{value}</li>)}</ul>
-          </section>
-          <section aria-labelledby="instructions-heading">
-            <h2 id="instructions-heading">Instructions</h2>
-            <ol>{item.instructions?.map((value, index) => <li key={index}>{value}</li>)}</ol>
-          </section>
-        </div>
+        <>
+          <header className={styles.hero}>
+            <div className={styles.heroText}>
+              {item.cuisine && <p className={styles.kicker}>{item.cuisine}</p>}
+              <h1 className={styles.h1}>{title}</h1>
+              {facts.length > 0 && (
+                <dl className={styles.facts}>
+                  {facts.map(([label, value]) => (
+                    <div key={label}>
+                      <dt>{label}</dt>
+                      <dd>{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+            </div>
+            <RecipeImage className={styles.heroImage} src={item.image} alt={title} />
+          </header>
+
+          <div className={styles.body}>
+            <section aria-labelledby="ingredients-heading" className={styles.ingredients}>
+              <h2 id="ingredients-heading">Ingredients</h2>
+              <ul>
+                {item.ingredients?.map((value, index) => (
+                  <li key={index}>{value}</li>
+                ))}
+              </ul>
+            </section>
+            <section aria-labelledby="instructions-heading" className={styles.instructions}>
+              <h2 id="instructions-heading">Instructions</h2>
+              <ol>
+                {item.instructions?.map((value, index) => (
+                  <li key={index}>{value}</li>
+                ))}
+              </ol>
+            </section>
+          </div>
+        </>
       )}
 
       <Dialog visible={showDialog} title={title} onClose={() => setShowDialog(false)} footer={null}>
         <div className={styles.dialogBody}>
-          <div className={styles.dialogHint}>
-            A quick view of the selected recipe.
-          </div>
+          <p className={styles.dialogHint}>A quick view of the selected recipe.</p>
           {status === 'succeeded' && item ? (
             <div className={styles.dialogGrid}>
-              {item.image && <img className={styles.dialogImage} src={item.image} alt={title} />}
+              <RecipeImage className={styles.dialogImage} src={item.image} alt="" />
               <div>
                 <div>
                   <b>ID:</b> {item.id}
@@ -99,9 +137,7 @@ export function RecipeDetailsPage() {
                 <div>
                   <b>Name:</b> {item.name}
                 </div>
-                <div className={styles.todo}>
-                  Ingredients and instructions are shown on the recipe page.
-                </div>
+                <p className={styles.dialogNote}>Ingredients and instructions are shown on the recipe page.</p>
               </div>
             </div>
           ) : (
@@ -109,6 +145,6 @@ export function RecipeDetailsPage() {
           )}
         </div>
       </Dialog>
-    </div>
+    </article>
   );
 }

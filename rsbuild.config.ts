@@ -14,7 +14,21 @@ export default defineConfig({
     alias: { '@': resolvePath('./src') },
   },
   html: {
+    template: './index.html',
     title: 'Recipes Explorer',
+    meta: { description: 'Browse sample recipes and open their ingredients and method.' },
+    tags: [
+      { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
+      { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' } },
+      {
+        tag: 'link',
+        attrs: {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap',
+        },
+      },
+      { tag: 'link', attrs: { rel: 'icon', href: '/recipe-placeholder.svg', type: 'image/svg+xml' } },
+    ],
   },
   output: {
     distPath: { root: resolvePath('./dist') },

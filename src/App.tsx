@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
+import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router';
 import { RecipesPage } from './pages/recipes/RecipesPage';
 import { RecipeDetailsPage } from './pages/recipe-details/RecipeDetailsPage';
 import styles from './App.module.scss';
@@ -9,7 +9,12 @@ export function App() {
     <BrowserRouter>
       <div className={styles.app}>
         <header className={styles.header}>
-          <div className={styles.brand}>Recipes Explorer</div>
+          <div className={styles.headerInner}>
+            <Link to="/recipes" className={styles.brand}>
+              Recipes <span className={styles.brandMark}>Explorer</span>
+            </Link>
+            <span className={styles.tagline}>Weeknight ideas, one page at a time</span>
+          </div>
         </header>
 
         <main className={styles.main}>
@@ -19,6 +24,13 @@ export function App() {
             <Route path="*" element={<Navigate to="/recipes" replace />} />
           </Routes>
         </main>
+
+        <footer className={styles.footer}>
+          <div className={styles.footerInner}>
+            Recipe data comes from the public{' '}
+            <a href="https://dummyjson.com/docs/recipes">DummyJSON sample API</a>.
+          </div>
+        </footer>
       </div>
     </BrowserRouter>
   );

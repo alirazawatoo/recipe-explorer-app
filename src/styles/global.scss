@@ -1,5 +1,18 @@
 :root {
   color-scheme: light;
+  --paper: #faf6ee;
+  --card: #fffdf8;
+  --ink: #2b2118;
+  --ink-soft: #5e5245;
+  --paprika: #a63d23;
+  --paprika-dark: #85301b;
+  --olive: #5b6b32;
+  --butter: #f3e3b8;
+  --line: #e6dccb;
+  --line-strong: #cbbda4;
+  --radius: 10px;
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
 }
 
 * {
@@ -8,13 +21,81 @@
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 a {
-  color: inherit;
+  color: var(--paprika);
+}
+
+a:hover {
+  color: var(--paprika-dark);
 }
 
 button {
   cursor: pointer;
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--olive);
+  outline-offset: 2px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover:not(:disabled) {
+    border-color: var(--paprika);
+    color: var(--paprika-dark);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.rc-dialog-content {
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.rc-dialog-header {
+  background: var(--card);
+  border-bottom-color: var(--line);
+}
+
+.rc-dialog-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }

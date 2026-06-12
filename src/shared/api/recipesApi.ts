@@ -9,6 +9,8 @@ export type Recipe = {
   prepTimeMinutes?: number;
   cookTimeMinutes?: number;
   servings?: number;
+  cuisine?: string;
+  difficulty?: string;
 };
 
 export type RecipesListResponse = {

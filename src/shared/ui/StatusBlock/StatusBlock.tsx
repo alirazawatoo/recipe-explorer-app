@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './StatusBlock.module.scss';
 import clsx from 'clsx';
+import styles from './StatusBlock.module.scss';
 
 type Props = {
   variant: 'loading' | 'error' | 'empty';
@@ -12,8 +12,8 @@ type Props = {
 export function StatusBlock({ variant, title, description, action }: Props) {
   return (
     <div className={clsx(styles.root, styles[variant])} role={variant === 'error' ? 'alert' : 'status'}>
-      <div className={styles.title}>{title}</div>
-      {description && <div className={styles.desc}>{description}</div>}
+      <p className={styles.title}>{title}</p>
+      {description && <p className={styles.desc}>{description}</p>}
       {action && <div className={styles.action}>{action}</div>}
     </div>
   );

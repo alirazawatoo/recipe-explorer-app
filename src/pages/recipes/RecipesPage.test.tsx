@@ -12,7 +12,7 @@ describe('RecipesPage', () => {
     const link = await screen.findByRole('link', { name: /Charred Corn Salad/ });
     expect(link.getAttribute('href')).toBe('/recipes/1');
     expect(screen.getAllByRole('listitem')).toHaveLength(10);
-    expect(screen.getByText('1 / 2')).toBeTruthy();
+    expect(screen.getByText('Page 1 of 2')).toBeTruthy();
   });
 
   test('the next button loads the second page', async () => {
