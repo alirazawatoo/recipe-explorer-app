@@ -1,6 +1,6 @@
 import { beforeEach, expect, test, vi } from 'vitest';
 import { configureStore } from '@reduxjs/toolkit';
-import { getRecipes, getRecipeById } from '@/shared/api/recipesApi';
+import { getRecipes, getRecipeById, type Recipe, type RecipesListResponse } from '@/shared/api/recipesApi';
 import { recipesReducer, recipesActions, loadRecipes, selectVisibleRecipes } from '@/pages/recipes/recipesSlice';
 import { recipeDetailsReducer, recipeDetailsActions, loadRecipeDetails } from '@/pages/recipe-details/recipeDetailsSlice';
 
@@ -12,7 +12,7 @@ function store() { return configureStore({reducer:{recipes:recipesReducer,recipe
 beforeEach(() => { list.mockReset(); details.mockReset(); });
 
 test('late old list response cannot replace the newer page', async () => {
-  let resolveOld!: (value: any) => void;
+  let resolveOld!: (value: RecipesListResponse) => void;
   list.mockImplementationOnce(() => new Promise(resolve => { resolveOld = resolve; }));
   list.mockResolvedValueOnce(fixture('New page'));
   const state = store();
@@ -46,7 +46,7 @@ test('abort propagates to the API and is not displayed as a user-facing error', 
 });
 
 test('cleared detail state ignores a later response', async () => {
-  let resolveOld!: (value: any) => void;
+  let resolveOld!: (value: Recipe) => void;
   details.mockImplementationOnce(() => new Promise(resolve => { resolveOld = resolve; }));
   const state = store();const pending = state.dispatch(loadRecipeDetails(1));
   state.dispatch(recipeDetailsActions.clear());
