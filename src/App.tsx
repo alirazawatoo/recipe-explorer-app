@@ -1,25 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { RecipesPage } from './pages/recipes/RecipesPage';
 import { RecipeDetailsPage } from './pages/recipe-details/RecipeDetailsPage';
 import styles from './App.module.scss';
 
 export function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <div className={styles.app}>
         <header className={styles.header}>
           <div className={styles.brand}>Recipes Explorer</div>
         </header>
 
         <main className={styles.main}>
-          <Switch>
-            <Route exact path="/recipes" component={RecipesPage} />
-            <Route exact path="/recipes/:id" component={RecipeDetailsPage} />
-            <Redirect to="/recipes" />
-          </Switch>
+          <Routes>
+            <Route path="/recipes" element={<RecipesPage />} />
+            <Route path="/recipes/:id" element={<RecipeDetailsPage />} />
+            <Route path="*" element={<Navigate to="/recipes" replace />} />
+          </Routes>
         </main>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }

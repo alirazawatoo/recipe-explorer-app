@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import Dialog from 'rc-dialog';
 import 'rc-dialog/assets/index.css';
 
@@ -10,7 +10,7 @@ import { loadRecipeDetails, recipeDetailsActions } from './recipeDetailsSlice';
 import styles from './RecipeDetailsPage.module.scss';
 
 export function RecipeDetailsPage() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const recipeId = Number(id);
 
   const dispatch = useAppDispatch();
