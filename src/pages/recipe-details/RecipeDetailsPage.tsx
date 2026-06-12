@@ -17,16 +17,29 @@ export function RecipeDetailsPage() {
   const { item, status, error } = useAppSelector((s) => s.recipeDetails);
 
   const [showDialog, setShowDialog] = useState(false);
+  // Bumping this re-runs the effect, so a retry is aborted on unmount like the first load.
+  const [attempt, setAttempt] = useState(0);
+  const isValidId = Number.isSafeInteger(recipeId) && recipeId >= 1;
 
   useEffect(() => {
-    if (!Number.isSafeInteger(recipeId) || recipeId < 1) return;
+    if (!isValidId) return;
     const request = dispatch(loadRecipeDetails(recipeId));
-    if (!Number.isSafeInteger(recipeId) || recipeId < 1) return <StatusBlock variant="error" title="Invalid recipe link" description="Choose a recipe from the list." action={<Link to="/recipes">Back to recipes</Link>} />;
-  return () => {
+    return () => {
       request.abort();
       dispatch(recipeDetailsActions.clear());
     };
-  }, [dispatch, recipeId]);
+  }, [dispatch, recipeId, isValidId, attempt]);
+
+  if (!isValidId) {
+    return (
+      <StatusBlock
+        variant="error"
+        title="Invalid recipe link"
+        description="Choose a recipe from the list."
+        action={<Link to="/recipes">Back to recipes</Link>}
+      />
+    );
+  }
 
   const title = item?.name ?? `Recipe #${recipeId}`;
 
@@ -49,7 +62,7 @@ export function RecipeDetailsPage() {
           title="Error"
           description={error ?? 'Something went wrong'}
           action={
-            <button type="button" onClick={() => dispatch(loadRecipeDetails(recipeId))}>
+            <button type="button" onClick={() => setAttempt((n) => n + 1)}>
               Retry
             </button>
           }

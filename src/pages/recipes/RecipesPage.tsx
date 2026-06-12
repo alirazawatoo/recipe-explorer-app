@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
@@ -13,11 +13,13 @@ export function RecipesPage() {
   const dispatch = useAppDispatch();
   const { status, error, page, pageSize, total, query } = useAppSelector((s) => s.recipes);
   const items = useAppSelector(selectVisibleRecipes);
+  // Bumping this re-runs the effect, so a retry is aborted on unmount like the first load.
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     const request = dispatch(loadRecipes());
     return () => request.abort();
-  }, [dispatch, page, pageSize]);
+  }, [dispatch, page, pageSize, attempt]);
 
   const debouncedSetQuery = useMemo(
     () => debounce((value: string) => dispatch(recipesActions.setQuery(value)), 300),
@@ -57,7 +59,7 @@ export function RecipesPage() {
           title="Error"
           description={error ?? 'Something went wrong'}
           action={
-            <button type="button" onClick={() => dispatch(loadRecipes())}>
+            <button type="button" onClick={() => setAttempt((n) => n + 1)}>
               Retry
             </button>
           }
