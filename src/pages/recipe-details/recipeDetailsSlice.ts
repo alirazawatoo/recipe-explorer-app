@@ -7,8 +7,6 @@ export type RecipeDetailsState = {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   requestId: string | null;
-
-  // NOTE: caching by ID / normalized entities intentionally NOT implemented (interview challenge).
 };
 
 const initialState: RecipeDetailsState = {
@@ -18,9 +16,9 @@ const initialState: RecipeDetailsState = {
   requestId: null,
 };
 
-export const loadRecipeDetails = createAsyncThunk('recipeDetails/load', async (id: number, { signal }) => {
-  return await getRecipeById(id, signal);
-});
+export const loadRecipeDetails = createAsyncThunk('recipeDetails/load', (id: number, { signal }) =>
+  getRecipeById(id, signal),
+);
 
 const slice = createSlice({
   name: 'recipeDetails',

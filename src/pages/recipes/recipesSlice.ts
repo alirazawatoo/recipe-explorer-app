@@ -7,17 +7,12 @@ export type RecipesState = {
   total: number;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+  /** Only the latest load may write results; older responses are ignored. */
   requestId: string | null;
-
-  // Query state (intentionally basic)
+  /** Filters the loaded page only; it never triggers a request. */
   query: string;
   page: number;
   pageSize: number;
-
-  // NOTE: Advanced interview challenges are intentionally NOT implemented:
-  // - URL sync (Router query params)
-  // - server-side search / sorting
-  // - normalized entities caching
 };
 
 const initialState: RecipesState = {
@@ -34,11 +29,8 @@ const initialState: RecipesState = {
 export const loadRecipes = createAsyncThunk(
   'recipes/load',
   async (_, { getState, signal }) => {
-    const state = getState() as RootState;
-    const { page, pageSize } = state.recipes;
-    const skip = (page - 1) * pageSize;
-    const limit = pageSize;
-    return await getRecipes({ limit, skip }, signal);
+    const { page, pageSize } = (getState() as RootState).recipes;
+    return getRecipes({ limit: pageSize, skip: (page - 1) * pageSize }, signal);
   }
 );
 
